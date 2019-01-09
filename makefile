@@ -1,6 +1,6 @@
 all:
 	g++ -g -c -I./src src/trie.cpp src/strtools.c src/otter.cpp src/otter_i.cpp
-	rm python/*.a
+	rm -rf python/*.a
 	ar cr python/libotter.a *.o 
 	rm -rf *.o
 	g++ -g src/test.cpp -L./python -lotter -lenchant -o otter

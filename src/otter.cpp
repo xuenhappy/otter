@@ -92,9 +92,6 @@ void select_path(std::map<int,std::list<path_node>* > &distance_mat,const int en
     
 }
 
-
-
-
 int type_ch(char ch){
     if (ch==' ')
         return 0;
@@ -107,6 +104,58 @@ int type_ch(char ch){
     return -1;
 }
 
+
+/**
+ *
+ * 进行enchant切分，如果可切分则返回1，并可以获取结果，否则0 
+ */
+int enchant_split(std::list<std::string> &result,const std::string &str,EnchantDict *en_dict){
+    //is right word
+    size_t max_index=str.length();
+    if(!enchant_dict_check(en_dict,str.c_str(),max_index)){
+        result.push_back(str);
+        return 1;
+    }
+    size_t idx;
+    for(idx=2;idx<max_index-2;++idx){
+        std::string left=str.substr(0,max_index-idx);
+        std::string right=str.substr(max_index-idx,idx);
+        if(!enchant_dict_check(en_dict,right.c_str(),right.length())){
+            if(enchant_split(result,left,en_dict)){
+                result.push_back(right);
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+
+void uplower_split(std::list<std::string> &tmp,const std::string &str){
+    size_t idx;
+    int pre=-1;
+    int pre_t=-1;
+    for(idx=0;idx<str.length();++idx){
+        int type=str[idx]<'a';
+        if(pre_t==type){
+            continue;
+        }
+        if(pre_t<0){
+            pre_t=type;
+            pre=idx;
+            continue;
+        }
+
+        if(idx>pre+1){
+            tmp.push_back(str.substr(pre,idx-pre));
+            pre=idx;
+        }
+        pre_t=type;
+    }
+    tmp.push_back(str.substr(pre,idx-pre));
+}
+
+
 /**
  *对英文进行简单的切分
  **/
@@ -115,8 +164,25 @@ void addtobuffer(std::list<std::string> &result,const std::string &str,int type,
         result.push_back(str);
         return;
     }
-
-
+    //up lower split
+    std::list<std::string> tmp;
+    std::list<std::string>::const_iterator it;
+    uplower_split(tmp,str);
+    if(tmp.size()>1){
+        for(it=tmp.begin();it!=tmp.end();++it){
+            result.push_back(*it);
+        }
+        return;
+    }
+    tmp.clear();
+    //enchant split
+    if(enchant_split(tmp,str,en_dict) && (tmp.size()>1)){
+        tmp.reverse();
+        for(it=tmp.begin();it!=tmp.end();++it){
+            result.push_back(*it);
+        }
+        return;
+    }
     result.push_back(str);
 }
 
@@ -215,6 +281,8 @@ trie_ptr load_dict(const char* path,int basic_mode){
     enchant_broker_free(en_broker);      
     return dict;
 }
+
+
 
 
 void split_list(trie_ptr dict,std::list<std::string> &src_list,std::list<std::string> &result){
