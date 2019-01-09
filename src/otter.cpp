@@ -177,7 +177,6 @@ void addtobuffer(std::list<std::string> &result,const std::string &str,int type,
     tmp.clear();
     //enchant split
     if(enchant_split(tmp,str,en_dict) && (tmp.size()>1)){
-        tmp.reverse();
         for(it=tmp.begin();it!=tmp.end();++it){
             result.push_back(*it);
         }
