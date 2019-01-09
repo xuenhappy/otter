@@ -238,7 +238,7 @@ void char_split(const char* input_str,size_t len,std::list<std::string> &result,
 	}
 }
 
-trie_ptr load_dict(const char* path,int basic_mode){
+trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict){
     FILE *fp;
     if((fp = fopen(path,"r")) == NULL){
         printf("open file %s error!\n",path);
@@ -254,8 +254,6 @@ trie_ptr load_dict(const char* path,int basic_mode){
     std::list<std::string>::const_iterator it;
     trie_ptr dict=make_trie_node("trie",0);
     trie_ptr tmp;
-    EnchantBroker *en_broker=enchant_broker_init();
-    EnchantDict *en_dict=enchant_broker_request_dict(en_broker,"en_US");
     while (fgets(buffer,bsize,fp)){
         word_list.clear();
         size_t slen=strlen(buffer)-1;
@@ -275,9 +273,7 @@ trie_ptr load_dict(const char* path,int basic_mode){
         }
     }
     fclose(fp);
-    free(buffer);
-    enchant_broker_free_dict(en_broker,en_dict);
-    enchant_broker_free(en_broker);      
+    free(buffer);    
     return dict;
 }
 

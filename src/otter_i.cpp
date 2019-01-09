@@ -19,17 +19,11 @@ struct seg_result{
 
 seg_dict_ptr load_gseg_dict(const char* path,int basic_mode){
     seg_dict_ptr dc=new struct seg_dict();
-    dc->dict=load_dict(path,basic_mode);
-    if(!dc->dict){
-        delete dc;
-        return NULL;
-    }
     dc->en_broker=enchant_broker_init();
     dc->en_dict=enchant_broker_request_dict(dc->en_broker,"en_US");
-    if(!dc->en_dict){
-        free_trie_node(dc->dict);
-        enchant_broker_free(dc->en_broker);
-        delete dc;
+    dc->dict=load_dict(path,basic_mode,dc->en_dict);
+    if(!(dc->en_broker&&dc->en_broker&&dc->en_dict)){
+        free_gseg_dict(dc);
         return NULL;
     }
     return dc;
@@ -41,6 +35,7 @@ void free_gseg_dict(seg_dict_ptr dict_obj){
         free_trie_node(dict_obj->dict);
         enchant_broker_free_dict(dict_obj->en_broker,dict_obj->en_dict);
         enchant_broker_free(dict_obj->en_broker);
+        delete dict_obj;
     }
 }
 

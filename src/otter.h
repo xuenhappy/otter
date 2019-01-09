@@ -35,7 +35,7 @@ void char_split(const char* input_str,size_t len,std::list<std::string> &result,
  * 加载dict文件
  * @param:basic_mode是否采用basic切分方式加载
  **/
-trie_ptr load_dict(const char* path,int basic_mode);
+trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict);
 
 
 /**
