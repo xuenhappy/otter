@@ -38,13 +38,16 @@ int main(){
 
     printf("-------------------\n");
 
-
-    trie_ptr nn=load_dict("dict/words.dic",1);
+    EnchantBroker *en_broker=enchant_broker_init();
+    EnchantDict *en_dict=enchant_broker_request_dict(en_broker,"en_us");
+    trie_ptr nn=load_dict("dict/words.dic",1,en_dict);
     if(nn){
         print_node(nn,0);
         free_trie_node(nn);
     }
 
+    enchant_broker_free_dict(en_broker,en_dict);
+    enchant_broker_free(en_broker);
     return EXIT_SUCCESS;
 
 }
