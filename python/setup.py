@@ -4,14 +4,14 @@ import platform
 
 LONGDOC = 'Fast C Short Path chinese and english cut'
 
-
 if platform.python_version().startswith('2'):
     otter_py2 = Extension('_otter_funcs_py2',
-        include_dirs=['.'],
-        sources=['_otter_funcs_py2.c'],
-        library_dirs=['.'],
+        include_dirs=['./otter/src/'],
+        sources=['./otter/src/_otter_funcs_py2.c'],
+        library_dirs=['./otter/src/'],
         libraries=['otter','enchant','stdc++','glib-2.0','gmodule-2.0'],
     )
+    
     setup(name='otter',
           version='0.10',
           description='Use C  Chinese Words Segementation Utilities',
@@ -40,7 +40,7 @@ if platform.python_version().startswith('2'):
         keywords='NLP,tokenizing,Chinese word segementation',
         packages=['otter'],
         package_dir={'otter':'otter'},
-        package_data={'otter':['otter/*.py','dict/*.*']},
+        package_data={'otter':['*.*','dict/*.*','src/*']},
         ext_modules = [otter_py2],
     )
 
@@ -76,9 +76,9 @@ if platform.python_version().startswith('3'):
             return get_ext_filename_without_platform_suffix(filename)
 
     otter_py3 = Extension('_otter_funcs_py3',
-            include_dirs=['.'],
-            library_dirs=['.'],
-            sources=['_otter_funcs_py3.c'],
+            include_dirs=['./otter/src/'],
+            library_dirs=['./otter/src/'],
+            sources=['./otter/src/_otter_funcs_py3.c'],
             libraries=['otter','enchant','stdc++','glib-2.0','gmodule-2.0'],
     )
     setup(name='otter',
@@ -110,6 +110,6 @@ if platform.python_version().startswith('3'):
         keywords='NLP,tokenizing,Chinese word segementation',
         packages=['otter','otter'],
         package_dir={'otter':'otter'},
-        package_data={'otter':['otter/*.py','dict/*.*']},
+        package_data={'otter':['*.*','dict/*.*','src/*']},
         ext_modules = [otter_py3],
 )

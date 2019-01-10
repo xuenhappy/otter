@@ -5,6 +5,8 @@ if platform.python_version().startswith('2'):
 else:
     from . import otter_funcs_py3 as otter_func
 
+__all__=['cut']
+
 SEG_DICT_DIR =os.path.join(os.path.split(os.path.realpath(__file__))[0], 'dict')
 
 
