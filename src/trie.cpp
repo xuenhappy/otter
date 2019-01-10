@@ -52,6 +52,7 @@ trie_ptr make_trie_node(const char* str,size_t hashval){
     tnode->subsize=0;
     tnode->caplity=0;
     tnode->next=NULL;
+    return tnode;
 }
 
 
@@ -89,6 +90,7 @@ void add_trie_node(trie_ptr src_tnode,int mid,trie_ptr sub_node){
         free(src_tnode->next);
         src_tnode->next=temp_next;
     }
+    
     //转移内容
     if(src_tnode->subsize>mid)
         memmove(src_tnode->next+mid+1,src_tnode->next+mid,(src_tnode->subsize-mid)*sizeof(trie_ptr));

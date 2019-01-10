@@ -1,10 +1,10 @@
 all:compile-lib;
 	rm -rf *.bin
-	g++ -g src/test.cpp -L./ -lotter -lenchant -o otter.bin
+	g++ -g -fPIC  src/test.cpp -L./ -lotter -lenchant -o otter.bin
 	rm -rf *.a
 	
 compile-lib:
-	g++ -g -c -I./src src/trie.cpp src/strtools.c src/otter.cpp src/otter_i.cpp
+	g++ -fPIC -c -g -O2 -I./src src/trie.cpp src/strtools.c src/otter.cpp src/otter_i.cpp
 	rm -rf *.a
 	ar cr libotter.a *.o 
 	rm -rf *.o
@@ -21,9 +21,9 @@ tmp_init:
 
 python:compile-lib tmp_init;
 	mv libotter.a python/dist
-	cp /usr/lib/x86_64-linux-gnu/libenchant.a python/dist
-	cd src && swig -python -outdir ../python/dist/otter -module otter_funcs_py2  -o ../python/dist/otter_py2_wrap.c  otter.i
-	cd src && swig -python -py3 -outdir ../python/dist/otter -module otter_funcs_py3 -o ../python/dist/otter_py3_wrap.c  otter.i
+	cp /usr/local/lib/libenchant-2.a python/dist
+	cd src && swig -python -outdir ../python/dist/otter -module otter_funcs_py2  -o ../python/dist/_otter_funcs_py2.c  otter.i
+	cd src && swig -python -py3 -outdir ../python/dist/otter -module otter_funcs_py3 -o ../python/dist/_otter_funcs_py3.c  otter.i
 	cd python/dist && python setup.py bdist_wheel
 	mv python/dist/dist/*.whl .
 	rm -rf python/dist

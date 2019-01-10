@@ -6,11 +6,11 @@ LONGDOC = 'Fast C Short Path chinese and english cut'
 
 
 if platform.python_version().startswith('2'):
-    otter_py2 = Extension('otter_funcs_py2',
+    otter_py2 = Extension('_otter_funcs_py2',
         include_dirs=['.'],
-        sources=['otter_py3_wrap.c'],
+        sources=['_otter_funcs_py2.c'],
         library_dirs=['.'],
-        libraries=['otter']
+        libraries=['otter','enchant']
     )
     setup(name='otter',
           version='0.10',
@@ -47,10 +47,11 @@ if platform.python_version().startswith('2'):
 
 if platform.python_version().startswith('3'):
 
-    otter_py3 = Extension('otter_funcs_py3',
+    otter_py3 = Extension('_otter_funcs_py3',
             include_dirs=['.'],
             library_dirs=['.'],
-            sources=['otter_py3_wrap.c'],
+            sources=['_otter_funcs_py3.c'],
+            libraries=['otter','enchant']
     )
     setup(name='otter',
           version='0.10',
