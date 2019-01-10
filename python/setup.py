@@ -45,7 +45,35 @@ if platform.python_version().startswith('2'):
     )
 
 
+
+import os
+import sysconfig
+def get_ext_filename_without_platform_suffix(filename):
+    name, ext = os.path.splitext(filename)
+    ext_suffix = sysconfig.get_config_var('EXT_SUFFIX')
+
+    if ext_suffix == ext:
+        return filename
+
+    ext_suffix = ext_suffix.replace(ext, '')
+    idx = name.find(ext_suffix)
+
+    if idx == -1:
+        return filename
+    else:
+        return name[:idx] + ext
+
+
+
+
+
 if platform.python_version().startswith('3'):
+    from Cython.Build import cythonize
+    from Cython.Distutils import build_ext
+    class BuildExtWithoutPlatformSuffix(build_ext):
+        def get_ext_filename(self, ext_name):
+            filename = super().get_ext_filename(ext_name)
+            return get_ext_filename_without_platform_suffix(filename)
 
     otter_py3 = Extension('_otter_funcs_py3',
             include_dirs=['.'],
@@ -54,7 +82,8 @@ if platform.python_version().startswith('3'):
             libraries=['otter','enchant','stdc++','glib-2.0','gmodule-2.0'],
     )
     setup(name='otter',
-          version='0.10',
+        cmdclass={'build_ext': BuildExtWithoutPlatformSuffix},
+        version='0.10',
         description='Use C  Chinese Words Segementation Utilities',
         long_description=LONGDOC,
         author='xuen',
