@@ -10,7 +10,7 @@ int main(){
     if(!dict){
         return 0;
     }
-    const char* test_str="hi software 湖北随州这是一个中文测试testmax?卡哪款";
+    const char* test_str="hi software 北京武汉 这是一个中文测试testmax?卡哪款";
     otter_result_ptr segr=otter_cut(dict,test_str,strlen(test_str),1);
     const char* c;
     while((c=iter_otter_result(segr))!=NULL){

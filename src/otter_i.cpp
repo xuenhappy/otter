@@ -20,9 +20,10 @@ struct seg_result{
 otter_dict_ptr load_otter_dict(const char* path,int basic_mode){
     otter_dict_ptr dc=new struct seg_dict();
     dc->en_broker=enchant_broker_init();
-    dc->en_dict=enchant_broker_request_dict(dc->en_broker,"en_US");
+    dc->en_dict=enchant_broker_request_dict(dc->en_broker,"en_us");
     dc->dict=load_dict(path,basic_mode,dc->en_dict);
     if(!(dc->en_broker&&dc->en_broker&&dc->en_dict)){
+        printf("load dict failed!\n");
         free_otter_dict(dc);
         return NULL;
     }
@@ -33,8 +34,10 @@ otter_dict_ptr load_otter_dict(const char* path,int basic_mode){
 void free_otter_dict(otter_dict_ptr dict_obj){
     if(dict_obj){
         free_trie_node(dict_obj->dict);
-        enchant_broker_free_dict(dict_obj->en_broker,dict_obj->en_dict);
-        enchant_broker_free(dict_obj->en_broker);
+        if(dict_obj->en_dict)
+            enchant_broker_free_dict(dict_obj->en_broker,dict_obj->en_dict);
+        if(dict_obj->en_broker)
+            enchant_broker_free(dict_obj->en_broker);
         delete dict_obj;
     }
 }

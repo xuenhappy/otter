@@ -10,7 +10,8 @@ if platform.python_version().startswith('2'):
         include_dirs=['.'],
         sources=['_otter_funcs_py2.c'],
         library_dirs=['.'],
-        libraries=['otter','enchant']
+        libraries=['otter','enchant'],
+        extra_link_args=['-lstdc++']
     )
     setup(name='otter',
           version='0.10',
@@ -51,7 +52,8 @@ if platform.python_version().startswith('3'):
             include_dirs=['.'],
             library_dirs=['.'],
             sources=['_otter_funcs_py3.c'],
-            libraries=['otter','enchant']
+            libraries=['otter','enchant'],
+            extra_link_args=['-lstdc++']
     )
     setup(name='otter',
           version='0.10',
