@@ -3,7 +3,7 @@ import platform
 if platform.python_version().startswith('2'):
     import otter_funcs_py2 as otter_func
 else:
-    import otter_funcs_py3 as otter_func
+    from . import otter_funcs_py3 as otter_func
 
 SEG_DICT_DIR =os.path.join(os.path.split(os.path.realpath(__file__))[0], 'dict')
 
