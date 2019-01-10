@@ -2983,10 +2983,10 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_int swig_types[1]
 #define SWIGTYPE_p_long_long swig_types[2]
 #define SWIGTYPE_p_namespace swig_types[3]
-#define SWIGTYPE_p_seg_result swig_types[4]
-#define SWIGTYPE_p_short swig_types[5]
-#define SWIGTYPE_p_signed_char swig_types[6]
-#define SWIGTYPE_p_trie_ptr swig_types[7]
+#define SWIGTYPE_p_seg_dict swig_types[4]
+#define SWIGTYPE_p_seg_result swig_types[5]
+#define SWIGTYPE_p_short swig_types[6]
+#define SWIGTYPE_p_signed_char swig_types[7]
 #define SWIGTYPE_p_unsigned_char swig_types[8]
 #define SWIGTYPE_p_unsigned_int swig_types[9]
 #define SWIGTYPE_p_unsigned_long_long swig_types[10]
@@ -3442,7 +3442,7 @@ SWIGINTERN PyObject *Swig_var_std_get(void) {
 }
 
 
-SWIGINTERN PyObject *_wrap_load_gseg_dict(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_load_otter_dict(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
   int arg2 ;
@@ -3453,21 +3453,21 @@ SWIGINTERN PyObject *_wrap_load_gseg_dict(PyObject *SWIGUNUSEDPARM(self), PyObje
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  trie_ptr result;
+  otter_dict_ptr result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:load_gseg_dict",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:load_otter_dict",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "load_gseg_dict" "', argument " "1"" of type '" "char const *""'");
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "load_otter_dict" "', argument " "1"" of type '" "char const *""'");
   }
   arg1 = (char *)(buf1);
   ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "load_gseg_dict" "', argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "load_otter_dict" "', argument " "2"" of type '" "int""'");
   } 
   arg2 = (int)(val2);
-  result = load_gseg_dict((char const *)arg1,arg2);
-  resultobj = SWIG_NewPointerObj((trie_ptr *)memcpy((trie_ptr *)calloc(1,sizeof(trie_ptr)),&result,sizeof(trie_ptr)), SWIGTYPE_p_trie_ptr, SWIG_POINTER_OWN |  0 );
+  result = (otter_dict_ptr)load_otter_dict((char const *)arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_seg_dict, 0 |  0 );
   if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
   return resultobj;
 fail:
@@ -3476,26 +3476,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_free_gseg_dict(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_free_otter_dict(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  trie_ptr arg1 ;
-  void *argp1 ;
+  otter_dict_ptr arg1 = (otter_dict_ptr) 0 ;
+  void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:free_gseg_dict",&obj0)) SWIG_fail;
-  {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_trie_ptr,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "free_gseg_dict" "', argument " "1"" of type '" "trie_ptr""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "free_gseg_dict" "', argument " "1"" of type '" "trie_ptr""'");
-    } else {
-      arg1 = *((trie_ptr *)(argp1));
-    }
+  if (!PyArg_ParseTuple(args,(char *)"O:free_otter_dict",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_seg_dict, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "free_otter_dict" "', argument " "1"" of type '" "otter_dict_ptr""'"); 
   }
-  free_gseg_dict(arg1);
+  arg1 = (otter_dict_ptr)(argp1);
+  free_otter_dict(arg1);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -3503,13 +3497,13 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_cut(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_otter_cut(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  trie_ptr arg1 ;
+  otter_dict_ptr arg1 = (otter_dict_ptr) 0 ;
   char *arg2 = (char *) 0 ;
   unsigned int arg3 ;
   int arg4 ;
-  void *argp1 ;
+  void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 ;
   char *buf2 = 0 ;
@@ -3522,37 +3516,31 @@ SWIGINTERN PyObject *_wrap_cut(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  seg_result_ptr result;
+  otter_result_ptr result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:cut",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_trie_ptr,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cut" "', argument " "1"" of type '" "trie_ptr""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "cut" "', argument " "1"" of type '" "trie_ptr""'");
-    } else {
-      arg1 = *((trie_ptr *)(argp1));
-    }
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:otter_cut",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_seg_dict, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "otter_cut" "', argument " "1"" of type '" "otter_dict_ptr""'"); 
   }
+  arg1 = (otter_dict_ptr)(argp1);
   res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cut" "', argument " "2"" of type '" "char const *""'");
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "otter_cut" "', argument " "2"" of type '" "char const *""'");
   }
   arg2 = (char *)(buf2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cut" "', argument " "3"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "otter_cut" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
   ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "cut" "', argument " "4"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "otter_cut" "', argument " "4"" of type '" "int""'");
   } 
   arg4 = (int)(val4);
-  result = (seg_result_ptr)cut(arg1,(char const *)arg2,arg3,arg4);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_seg_result, SWIG_POINTER_OWN |  0 );
+  result = (otter_result_ptr)otter_cut(arg1,(char const *)arg2,arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_seg_result, 0 |  0 );
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return resultobj;
 fail:
@@ -3561,21 +3549,21 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_next(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_iter_otter_result(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  seg_result_ptr arg1 = (seg_result_ptr) 0 ;
+  otter_result_ptr arg1 = (otter_result_ptr) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   char *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:next",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:iter_otter_result",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_seg_result, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "next" "', argument " "1"" of type '" "seg_result_ptr""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iter_otter_result" "', argument " "1"" of type '" "otter_result_ptr""'"); 
   }
-  arg1 = (seg_result_ptr)(argp1);
-  result = (char *)next(arg1);
+  arg1 = (otter_result_ptr)(argp1);
+  result = (char *)iter_otter_result(arg1);
   resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
@@ -3583,20 +3571,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_free_gseg_handle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_free_otter_result(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  seg_result_ptr arg1 = (seg_result_ptr) 0 ;
+  otter_result_ptr arg1 = (otter_result_ptr) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:free_gseg_handle",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_seg_result, SWIG_POINTER_DISOWN |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:free_otter_result",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_seg_result, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "free_gseg_handle" "', argument " "1"" of type '" "seg_result_ptr""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "free_otter_result" "', argument " "1"" of type '" "otter_result_ptr""'"); 
   }
-  arg1 = (seg_result_ptr)(argp1);
-  free_gseg_handle(arg1);
+  arg1 = (otter_result_ptr)(argp1);
+  free_otter_result(arg1);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -3606,11 +3594,11 @@ fail:
 
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
-	 { (char *)"load_gseg_dict", _wrap_load_gseg_dict, METH_VARARGS, NULL},
-	 { (char *)"free_gseg_dict", _wrap_free_gseg_dict, METH_VARARGS, NULL},
-	 { (char *)"cut", _wrap_cut, METH_VARARGS, NULL},
-	 { (char *)"next", _wrap_next, METH_VARARGS, NULL},
-	 { (char *)"free_gseg_handle", _wrap_free_gseg_handle, METH_VARARGS, NULL},
+	 { (char *)"load_otter_dict", _wrap_load_otter_dict, METH_VARARGS, NULL},
+	 { (char *)"free_otter_dict", _wrap_free_otter_dict, METH_VARARGS, NULL},
+	 { (char *)"otter_cut", _wrap_otter_cut, METH_VARARGS, NULL},
+	 { (char *)"iter_otter_result", _wrap_iter_otter_result, METH_VARARGS, NULL},
+	 { (char *)"free_otter_result", _wrap_free_otter_result, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -3621,10 +3609,10 @@ static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "intptr_t *|int *|int_least32_t *|int_fast32_t *|int32_t *|int_fast16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_long_long = {"_p_long_long", "int_least64_t *|int_fast64_t *|int64_t *|long long *|intmax_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_namespace = {"_p_namespace", "namespace *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_seg_result = {"_p_seg_result", "struct seg_result *|seg_result_ptr", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_seg_dict = {"_p_seg_dict", "otter_dict_ptr|struct seg_dict *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_seg_result = {"_p_seg_result", "struct seg_result *|otter_result_ptr", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_short = {"_p_short", "short *|int_least16_t *|int16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "signed char *|int_least8_t *|int_fast8_t *|int8_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_trie_ptr = {"_p_trie_ptr", "trie_ptr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|uint_least8_t *|uint_fast8_t *|uint8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "uintptr_t *|uint_least32_t *|uint_fast32_t *|uint32_t *|unsigned int *|uint_fast16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_long_long = {"_p_unsigned_long_long", "uint_least64_t *|uint_fast64_t *|uint64_t *|unsigned long long *|uintmax_t *", 0, 0, (void*)0, 0};
@@ -3635,10 +3623,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_int,
   &_swigt__p_long_long,
   &_swigt__p_namespace,
+  &_swigt__p_seg_dict,
   &_swigt__p_seg_result,
   &_swigt__p_short,
   &_swigt__p_signed_char,
-  &_swigt__p_trie_ptr,
   &_swigt__p_unsigned_char,
   &_swigt__p_unsigned_int,
   &_swigt__p_unsigned_long_long,
@@ -3649,10 +3637,10 @@ static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0,
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_long_long[] = {  {&_swigt__p_long_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_namespace[] = {  {&_swigt__p_namespace, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_seg_dict[] = {  {&_swigt__p_seg_dict, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_seg_result[] = {  {&_swigt__p_seg_result, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_trie_ptr[] = {  {&_swigt__p_trie_ptr, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_long_long[] = {  {&_swigt__p_unsigned_long_long, 0, 0, 0},{0, 0, 0, 0}};
@@ -3663,10 +3651,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_int,
   _swigc__p_long_long,
   _swigc__p_namespace,
+  _swigc__p_seg_dict,
   _swigc__p_seg_result,
   _swigc__p_short,
   _swigc__p_signed_char,
-  _swigc__p_trie_ptr,
   _swigc__p_unsigned_char,
   _swigc__p_unsigned_int,
   _swigc__p_unsigned_long_long,

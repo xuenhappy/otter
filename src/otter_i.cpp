@@ -17,20 +17,20 @@ struct seg_result{
 };
 
 
-seg_dict_ptr load_gseg_dict(const char* path,int basic_mode){
-    seg_dict_ptr dc=new struct seg_dict();
+otter_dict_ptr load_otter_dict(const char* path,int basic_mode){
+    otter_dict_ptr dc=new struct seg_dict();
     dc->en_broker=enchant_broker_init();
     dc->en_dict=enchant_broker_request_dict(dc->en_broker,"en_US");
     dc->dict=load_dict(path,basic_mode,dc->en_dict);
     if(!(dc->en_broker&&dc->en_broker&&dc->en_dict)){
-        free_gseg_dict(dc);
+        free_otter_dict(dc);
         return NULL;
     }
     return dc;
 }
 
 
-void free_gseg_dict(seg_dict_ptr dict_obj){
+void free_otter_dict(otter_dict_ptr dict_obj){
     if(dict_obj){
         free_trie_node(dict_obj->dict);
         enchant_broker_free_dict(dict_obj->en_broker,dict_obj->en_dict);
@@ -40,7 +40,7 @@ void free_gseg_dict(seg_dict_ptr dict_obj){
 }
 
 
-seg_result_ptr cut(seg_dict_ptr dict_obj,const char* utf_input,unsigned int len,int basic_mode){
+otter_result_ptr otter_cut(otter_dict_ptr dict_obj,const char* utf_input,unsigned int len,int basic_mode){
     std::list<std::string> *data=new std::list<std::string>();
     std::vector<std::string> strlist;
     if(basic_mode){
@@ -49,14 +49,14 @@ seg_result_ptr cut(seg_dict_ptr dict_obj,const char* utf_input,unsigned int len,
         char_split(utf_input,len,strlist,dict_obj->en_dict);
     }
     split_list(dict_obj->dict,strlist,*data);
-    seg_result_ptr res=new struct seg_result();
+    otter_result_ptr res=new struct seg_result();
     res->data=data;
     res->it=data->begin();
     return res;
 }
 
 
-const char* next(seg_result_ptr res){
+const char* iter_otter_result(otter_result_ptr res){
     if(res->it!=res->data->end()){
         const char* out=res->it->c_str();
         ++(res->it);
@@ -66,7 +66,7 @@ const char* next(seg_result_ptr res){
 }
 
 
-void free_gseg_handle(seg_result_ptr res){
+void free_otter_result(otter_result_ptr res){
     if(res){
         delete res->data;
         delete res;

@@ -15,33 +15,34 @@ typedef struct path_node{
     size_t endpoint;//边结束点
     float score;//边权重
     const char* idstr;
-}path_node;
+}path_data;
 
-typedef struct node_info{
+struct node_dat{
     int pre;
     int vist;
     float val;
-}node_dat;
+};
 
 
 
-void select_path(std::map<size_t,std::list<path_node>* > &distance_mat,const size_t end_point,std::list<std::string> &result){
+void select_path(std::map<size_t,std::list<path_data>* > &distance_mat,const size_t end_point,std::list<std::string> &result){
     //init data
     size_t v_size=distance_mat.size();
-    node_dat vdata[v_size];
+    node_dat* vdata=new node_dat[v_size];
     for(size_t i=0;i<v_size;++i){
-        node_dat x=vdata[i];
+        node_dat &x=vdata[i];
         x.pre=-1;
         x.vist=0;
         x.val=-1.0;
     }
-    std::list<path_node> *tmp=distance_mat[0];
-    std::list<path_node>::iterator it;
+    std::list<path_data> *tmp=distance_mat[0];
+    std::list<path_data>::iterator it;
     for(it=tmp->begin();it!=tmp->end();++it){
-        node_dat x=vdata[it->endpoint];
+        node_dat &x=vdata[it->endpoint];
         x.pre=0;
         x.val=it->score;
     }
+   
     //dijkstra select
     float mindist;
     size_t u;
@@ -49,7 +50,7 @@ void select_path(std::map<size_t,std::list<path_node>* > &distance_mat,const siz
         mindist = -1.0;
         u = 0;
         for(size_t i=0;i<v_size;++i){
-            node_dat x=vdata[i];
+            node_dat &x=vdata[i];
             if((!x.vist) && (x.val>=0) && (x.val<mindist || mindist<0)){
                 u=i;
                 mindist=x.val;
@@ -60,7 +61,7 @@ void select_path(std::map<size_t,std::list<path_node>* > &distance_mat,const siz
             break;
         tmp=distance_mat[u+1];
         for(it=tmp->begin();it!=tmp->end();++it){
-            node_dat x=vdata[it->endpoint];
+            node_dat &x=vdata[it->endpoint];
             if(x.vist)
                 continue;
             float c=vdata[u].val+it->score;
@@ -71,13 +72,17 @@ void select_path(std::map<size_t,std::list<path_node>* > &distance_mat,const siz
 
         }
     }
+    
 
     //select
     std::list<int> path;
     path.push_back(end_point+1);
-    while(path.back()>0)
+    while(path.back()>0){
         path.push_back(vdata[path.back()-1].pre);
+    }
     path.reverse();
+
+    
 
     std::list<int>::iterator pit=path.begin();
     int p=*pit;
@@ -90,7 +95,7 @@ void select_path(std::map<size_t,std::list<path_node>* > &distance_mat,const siz
         p=n+1;
     }
 
-    
+    delete []vdata;    
 }
 
 int type_ch(char ch){
@@ -301,12 +306,11 @@ void split_list(trie_ptr dict,std::vector<std::string> &src_list,std::list<std::
         result.insert(result.end(),src_list.begin(),src_list.end());
         return;
     }
-    std::map<size_t,std::list<path_node>* > distance_mat;
+    std::map<size_t,std::list<path_data>* > distance_mat;
     std::vector<std::string>::const_iterator sit;
     std::list<trie_match_result>::const_iterator it;
-    std::map<size_t,std::list<path_node>* >::iterator mit;
-    path_node tnode;
-
+    std::map<size_t,std::list<path_data>* >::iterator mit;
+    path_data tnode;
     //add basic data
     size_t index=-1;
     for(sit=src_list.begin();sit!=src_list.end();++sit){
@@ -314,10 +318,11 @@ void split_list(trie_ptr dict,std::vector<std::string> &src_list,std::list<std::
         tnode.score=1.0;
         tnode.endpoint=index;
         tnode.idstr=sit->c_str();
-        std::list<path_node>* c=new std::list<path_node>();
+        std::list<path_data>* c=new std::list<path_data>();
         c->push_back(tnode);
-        distance_mat.insert(std::pair<size_t,std::list<path_node>* >(index,c));
+        distance_mat.insert(std::pair<size_t,std::list<path_data>* >(index,c));
     }
+    
 
     //store and add tmp join data
     std::list<std::string> join_data;
@@ -330,8 +335,12 @@ void split_list(trie_ptr dict,std::vector<std::string> &src_list,std::list<std::
         mit=distance_mat.find(it->st);
         mit->second->push_back(tnode);
     }
-
-
+    
+    // std::list<std::string>::const_iterator v;
+    // for(v=join_data.begin();v!=join_data.end();++v){
+    //      printf("%s|",v->c_str());
+    // } 
+    // printf("\n");
     select_path(distance_mat,src_list.size()-1,result);
     //clear
     for(mit=distance_mat.begin();mit!=distance_mat.end();++mit){

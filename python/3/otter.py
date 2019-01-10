@@ -96,25 +96,25 @@ except __builtin__.Exception:
     _newclass = 0
 
 
-def load_gseg_dict(path: 'char const *', basic_mode: 'int') -> "trie_ptr":
-    return _otter.load_gseg_dict(path, basic_mode)
-load_gseg_dict = _otter.load_gseg_dict
+def load_otter_dict(path: 'char const *', basic_mode: 'int') -> "otter_dict_ptr":
+    return _otter.load_otter_dict(path, basic_mode)
+load_otter_dict = _otter.load_otter_dict
 
-def free_gseg_dict(dict_obj: 'trie_ptr') -> "void":
-    return _otter.free_gseg_dict(dict_obj)
-free_gseg_dict = _otter.free_gseg_dict
+def free_otter_dict(dict_obj: 'otter_dict_ptr') -> "void":
+    return _otter.free_otter_dict(dict_obj)
+free_otter_dict = _otter.free_otter_dict
 
-def cut(dict_obj: 'trie_ptr', unincode_input: 'char const *', len: 'unsigned int', basic_mode: 'int') -> "seg_result_ptr":
-    return _otter.cut(dict_obj, unincode_input, len, basic_mode)
-cut = _otter.cut
+def otter_cut(dict_obj: 'otter_dict_ptr', unincode_input: 'char const *', len: 'unsigned int', basic_mode: 'int') -> "otter_result_ptr":
+    return _otter.otter_cut(dict_obj, unincode_input, len, basic_mode)
+otter_cut = _otter.otter_cut
 
-def next(result: 'seg_result_ptr') -> "char const *":
-    return _otter.next(result)
-next = _otter.next
+def iter_otter_result(result: 'otter_result_ptr') -> "char const *":
+    return _otter.iter_otter_result(result)
+iter_otter_result = _otter.iter_otter_result
 
-def free_gseg_handle(result: 'seg_result_ptr') -> "void":
-    return _otter.free_gseg_handle(result)
-free_gseg_handle = _otter.free_gseg_handle
+def free_otter_result(result: 'otter_result_ptr') -> "void":
+    return _otter.free_otter_result(result)
+free_otter_result = _otter.free_otter_result
 # This file is compatible with both classic and new-style classes.
 
 cvar = _otter.cvar

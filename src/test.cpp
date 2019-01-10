@@ -3,51 +3,22 @@
 #include <list>
 #include <string.h>
 using namespace std;
-
-#include "trie.h"
-#include "otter.h"
+#include "otter_i.h"
 
 int main(){
-    trie_ptr root=make_trie_node("root",100);
-    trie_ptr c=insert_trie(root,"as",0);
-    c=insert_trie(c,"bn",1);
-    c=insert_trie(c,"l",1);
-
-
-    c=insert_trie(root,"as",0);
-    c=insert_trie(c,"bn",0);
-    c=insert_trie(c,"kk",1);
-
-    c=insert_trie(root,"jj",0);
-    c=insert_trie(c,"bn",1); 
-
-    print_node(root,0);
-    free_trie_node(root);
-
-
-    const char* test_str="sd  a32142你好啊!te st";
-    vector<string> res;
-    basic_split(test_str,strlen(test_str),res,NULL);
-    printf("\nsrc: %s\n",test_str);
-    vector<string>::const_iterator it;
-    for(it=res.begin();it!=res.end();++it){
-        printf("%s|",it->c_str());
+    otter_dict_ptr dict=load_otter_dict("dict/words.dic",1);
+    if(!dict){
+        return 0;
+    }
+    const char* test_str="hi software 湖北随州这是一个中文测试testmax?卡哪款";
+    otter_result_ptr segr=otter_cut(dict,test_str,strlen(test_str),1);
+    const char* c;
+    while((c=iter_otter_result(segr))!=NULL){
+        printf("%s|",c);
     }
     printf("\n");
-
-
-    printf("-------------------\n");
-
-    EnchantBroker *en_broker=enchant_broker_init();
-    EnchantDict *en_dict=enchant_broker_request_dict(en_broker,"en_us");
-    trie_ptr nn=load_dict("dict/words.dic",1,en_dict);
-    if(nn){
-        print_node(nn,0);
-        free_trie_node(nn);
-    }
-
-    enchant_broker_free_dict(en_broker,en_dict);
-    enchant_broker_free(en_broker);
+    free_otter_result(segr);
+    free_otter_dict(dict);
     return EXIT_SUCCESS;
 
 }

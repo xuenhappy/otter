@@ -96,25 +96,25 @@ except __builtin__.Exception:
     _newclass = 0
 
 
-def load_gseg_dict(path, basic_mode):
-    return _otter.load_gseg_dict(path, basic_mode)
-load_gseg_dict = _otter.load_gseg_dict
+def load_otter_dict(path, basic_mode):
+    return _otter.load_otter_dict(path, basic_mode)
+load_otter_dict = _otter.load_otter_dict
 
-def free_gseg_dict(dict_obj):
-    return _otter.free_gseg_dict(dict_obj)
-free_gseg_dict = _otter.free_gseg_dict
+def free_otter_dict(dict_obj):
+    return _otter.free_otter_dict(dict_obj)
+free_otter_dict = _otter.free_otter_dict
 
-def cut(dict_obj, unincode_input, len, basic_mode):
-    return _otter.cut(dict_obj, unincode_input, len, basic_mode)
-cut = _otter.cut
+def otter_cut(dict_obj, unincode_input, len, basic_mode):
+    return _otter.otter_cut(dict_obj, unincode_input, len, basic_mode)
+otter_cut = _otter.otter_cut
 
-def next(result):
-    return _otter.next(result)
-next = _otter.next
+def iter_otter_result(result):
+    return _otter.iter_otter_result(result)
+iter_otter_result = _otter.iter_otter_result
 
-def free_gseg_handle(result):
-    return _otter.free_gseg_handle(result)
-free_gseg_handle = _otter.free_gseg_handle
+def free_otter_result(result):
+    return _otter.free_otter_result(result)
+free_otter_result = _otter.free_otter_result
 # This file is compatible with both classic and new-style classes.
 
 cvar = _otter.cvar
