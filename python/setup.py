@@ -79,7 +79,7 @@ if platform.python_version().startswith('3'):
             'Topic :: Text Processing :: Linguistic',
         ],
         keywords='NLP,tokenizing,Chinese word segementation',
-        packages=['otter','enchant'],
+        packages=['otter','otter'],
         package_dir={'otter':'otter'},
         package_data={'otter':['otter/*.py','dict/*.*']},
         ext_modules = [otter_py3],
