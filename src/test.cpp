@@ -26,10 +26,10 @@ int main(){
 
 
     const char* test_str="sd  a32142你好啊!te st";
-    list<string> res;
+    vector<string> res;
     basic_split(test_str,strlen(test_str),res,NULL);
     printf("\nsrc: %s\n",test_str);
-    list<string>::const_iterator it;
+    vector<string>::const_iterator it;
     for(it=res.begin();it!=res.end();++it){
         printf("%s|",it->c_str());
     }

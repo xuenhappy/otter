@@ -21,13 +21,13 @@ extern "C" {
 /**
  *对原始的数据进行基本的切分 
  **/
-void basic_split(const char* input_str,size_t len,std::list<std::string> &result,EnchantDict *en_dict);
+void basic_split(const char* input_str,size_t len,std::vector<std::string> &result,EnchantDict *en_dict);
 
 /**
  * 
  *按照单个字符切分字符串 
  **/
-void char_split(const char* input_str,size_t len,std::list<std::string> &result,EnchantDict *en_dict);
+void char_split(const char* input_str,size_t len,std::vector<std::string> &result,EnchantDict *en_dict);
 
 
 
@@ -41,7 +41,7 @@ trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict);
 /**
  * 对给定的list利用dict进行组合切分，并按照最短覆盖路径进行选择
  **/
-void split_list(trie_ptr dict,std::list<std::string> &src_list,std::list<std::string> &result);
+void split_list(trie_ptr dict,std::vector<std::string> &src_list,std::list<std::string> &result);
 
 
 

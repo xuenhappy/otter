@@ -42,7 +42,7 @@ void free_gseg_dict(seg_dict_ptr dict_obj){
 
 seg_result_ptr cut(seg_dict_ptr dict_obj,const char* utf_input,unsigned int len,int basic_mode){
     std::list<std::string> *data=new std::list<std::string>();
-    std::list<std::string> strlist;
+    std::vector<std::string> strlist;
     if(basic_mode){
         basic_split(utf_input,len,strlist,dict_obj->en_dict);
     }else{

@@ -9,11 +9,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <set>
 
 typedef struct path_node{
-    int endpoint;//边结束点
+    size_t endpoint;//边结束点
     float score;//边权重
-    int idx;//边的编号
+    const char* idstr;
 }path_node;
 
 typedef struct node_info{
@@ -24,7 +25,7 @@ typedef struct node_info{
 
 
 
-void select_path(std::map<int,std::list<path_node>* > &distance_mat,const int end_point,std::list<int> &result){
+void select_path(std::map<size_t,std::list<path_node>* > &distance_mat,const size_t end_point,std::list<std::string> &result){
     //init data
     size_t v_size=distance_mat.size();
     node_dat vdata[v_size];
@@ -84,8 +85,8 @@ void select_path(std::map<int,std::list<path_node>* > &distance_mat,const int en
         int n=*pit-1;
         tmp=distance_mat[p];
         for(it=tmp->begin();it!=tmp->end();++it)
-            if((it->endpoint==n) && (it->idx>=0))
-                result.push_back(it->idx);
+            if((it->endpoint==n) && it->idstr)
+                result.push_back(it->idstr);
         p=n+1;
     }
 
@@ -109,11 +110,11 @@ int type_ch(char ch){
  *
  * 进行enchant切分，如果可切分则返回1，并可以获取结果，否则0 
  */
-int enchant_split(std::list<std::string> &result,const std::string &str,EnchantDict *en_dict){
+int enchant_split(std::list<std::string> &tmp,const std::string &str,EnchantDict *en_dict){
     //is right word
     size_t max_index=str.length();
     if(!enchant_dict_check(en_dict,str.c_str(),max_index)){
-        result.push_back(str);
+        tmp.push_back(str);
         return 1;
     }
     size_t idx;
@@ -121,8 +122,8 @@ int enchant_split(std::list<std::string> &result,const std::string &str,EnchantD
         std::string left=str.substr(0,max_index-idx);
         std::string right=str.substr(max_index-idx,idx);
         if(!enchant_dict_check(en_dict,right.c_str(),right.length())){
-            if(enchant_split(result,left,en_dict)){
-                result.push_back(right);
+            if(enchant_split(tmp,left,en_dict)){
+                tmp.push_back(right);
                 return 1;
             }
         }
@@ -159,8 +160,8 @@ void uplower_split(std::list<std::string> &tmp,const std::string &str){
 /**
  *对英文进行简单的切分
  **/
-void addtobuffer(std::list<std::string> &result,const std::string &str,int type,EnchantDict *en_dict){
-    if(str.length()<5||type!=1){
+void addtobuffer(std::vector<std::string> &result,const std::string &str,int type,EnchantDict *en_dict){
+    if(str.length()<6||type!=1){
         result.push_back(str);
         return;
     }
@@ -187,7 +188,8 @@ void addtobuffer(std::list<std::string> &result,const std::string &str,int type,
 
 
 
-void basic_split(const char* input_str,size_t len,std::list<std::string> &result,EnchantDict *en_dict){
+void basic_split(const char* input_str,size_t len,std::vector<std::string> &result,EnchantDict *en_dict){
+    result.reserve(len);
     size_t start=0,end=0;
     int buffer_st=-1,buffer_type=-1;
 	while(iter_utf8str((const unsigned char*)input_str,len,&end)!=ITER_UTF8_EOF){
@@ -230,7 +232,8 @@ void basic_split(const char* input_str,size_t len,std::list<std::string> &result
 }
 
 
-void char_split(const char* input_str,size_t len,std::list<std::string> &result,EnchantDict *en_dict){
+void char_split(const char* input_str,size_t len,std::vector<std::string> &result,EnchantDict *en_dict){
+    result.reserve(len);
     size_t start=0,end=0;
 	while(iter_utf8str((const unsigned char*)input_str,len,&end)!=ITER_UTF8_EOF){
         result.push_back(std::string(input_str+start,end-start+1));
@@ -250,8 +253,8 @@ trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict){
         exit(0);
         printf("Memory overflow . \n");
     }
-    std::list<std::string> word_list;
-    std::list<std::string>::const_iterator it;
+    std::vector<std::string> word_list;
+    std::vector<std::string>::const_iterator it;
     trie_ptr dict=make_trie_node("trie",0);
     trie_ptr tmp;
     while (fgets(buffer,bsize,fp)){
@@ -278,13 +281,63 @@ trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict){
 }
 
 
+/**
+ *合并字符串
+ **/
+void join_str(std::vector<std::string> &src_list,size_t st,size_t et,std::list<std::string> &dist_list){
+    dist_list.push_back("");
+    std::string &last=dist_list.back();
+    last.clear();
+    last.reserve((et-st+1)*3+5);
+    for(int i=st;i<=et;i++){
+        last.append(src_list[i]);
+    }
+}
+
+void split_list(trie_ptr dict,std::vector<std::string> &src_list,std::list<std::string> &result){
+    std::list<trie_match_result> tmp;
+    findseq(dict,src_list,tmp);
+    if(tmp.size()<1){//!nothing to do
+        result.insert(result.end(),src_list.begin(),src_list.end());
+        return;
+    }
+    std::map<size_t,std::list<path_node>* > distance_mat;
+    std::vector<std::string>::const_iterator sit;
+    std::list<trie_match_result>::const_iterator it;
+    std::map<size_t,std::list<path_node>* >::iterator mit;
+    path_node tnode;
+
+    //add basic data
+    size_t index=-1;
+    for(sit=src_list.begin();sit!=src_list.end();++sit){
+        ++index;
+        tnode.score=1.0;
+        tnode.endpoint=index;
+        tnode.idstr=sit->c_str();
+        std::list<path_node>* c=new std::list<path_node>();
+        c->push_back(tnode);
+        distance_mat.insert(std::pair<size_t,std::list<path_node>* >(index,c));
+    }
+
+    //store and add tmp join data
+    std::list<std::string> join_data;
+    for(it=tmp.begin();it!=tmp.end();++it){
+        tnode.score=1.0;
+        tnode.endpoint=it->et;
+        join_str(src_list,it->st,it->et,join_data);
+        tnode.idstr=join_data.back().c_str();
+
+        mit=distance_mat.find(it->st);
+        mit->second->push_back(tnode);
+    }
 
 
-void split_list(trie_ptr dict,std::list<std::string> &src_list,std::list<std::string> &result){
-
-
-
-
-    
+    select_path(distance_mat,src_list.size()-1,result);
+    //clear
+    for(mit=distance_mat.begin();mit!=distance_mat.end();++mit){
+        mit->second->clear();
+        delete mit->second;
+        mit->second=NULL;
+    }
 }
 

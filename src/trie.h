@@ -4,6 +4,7 @@
 #ifndef OTTER_TRIE_H_
 #define OTTER_TRIE_H_
 
+#include <list>
 #include <vector>
 #include <string>
 
@@ -45,7 +46,7 @@ trie_ptr insert_trie(trie_ptr tnode,const char* str,int danger);
  *匹配数据中出现的字符串
  *
  **/
-void findseq(trie_ptr root,const std::vector<std::string> &seq, std::vector<trie_match_result> &result);
+void findseq(trie_ptr root,const std::vector<std::string> &seq, std::list<trie_match_result> &result);
 
 
 

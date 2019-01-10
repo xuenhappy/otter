@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-#include <list>
 
 inline size_t hash_string(const char* __s){
     unsigned long __h = 0;
@@ -187,7 +186,7 @@ trie_ptr insert_trie(trie_ptr tnode,const char* str,int danger){
 /**
  * 查找序列包含的所有前缀
  */
-void findseq(trie_ptr root,const std::vector<std::string> &seq, std::vector<trie_match_result> &result){
+void findseq(trie_ptr root,const std::vector<std::string> &seq, std::list<trie_match_result> &result){
     std::list<std::pair<trie_ptr, trie_match_result> > paths;
     std::list<std::pair<trie_ptr, trie_match_result> >::iterator pit;
     std::vector<std::string>::const_iterator cit;
