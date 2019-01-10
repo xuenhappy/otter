@@ -13,7 +13,7 @@ SEG_DICT_DIR =os.path.join(os.path.split(os.path.realpath(__file__))[0], 'dict')
 MAIN_DICT=otter_func.load_otter_dict(os.path.join(SEG_DICT_DIR,"words.dic"),1)
 EN_DICT=otter_func.load_otter_dict(os.path.join(SEG_DICT_DIR,"en_root.dic"),0)
 
-def cut(unincode_input,use_basic =True):
+def cut_2(unincode_input,use_basic =True):
     """ do segmentation
     """
     _input=unincode_input.encode('utf-8', 'ignore')
@@ -29,3 +29,27 @@ def cut(unincode_input,use_basic =True):
             break
         yield word.decode('utf-8', 'ignore')
     otter_func.free_otter_result(handle)
+
+
+def cut_3(unincode_input,use_basic =True):
+    """ do segmentation
+    """
+    lens=len(unincode_input.encode('utf-8', 'ignore'))
+    handle=None
+    if use_basic:
+        handle=otter_func.otter_cut(MAIN_DICT,unincode_input,lens,1)
+    else:
+        handle=otter_func.otter_cut(EN_DICT,unincode_input,lens,0)
+
+    while True:
+        word=otter_func.iter_otter_result(handle)
+        if word is None:
+            break
+        yield word
+    otter_func.free_otter_result(handle)
+
+cut=None
+if platform.python_version().startswith('2'):
+    cut=cut_2
+else:
+    cut=cut_3
