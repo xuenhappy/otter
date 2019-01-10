@@ -1,3 +1,4 @@
+import setuptools
 from distutils.core import setup, Extension
 import platform
 
@@ -5,10 +6,11 @@ LONGDOC = 'Fast C Short Path chinese and english cut'
 
 
 if platform.python_version().startswith('2'):
-    otter_py2 = Extension('_otter',
-        include_dirs=['src/'],
-        sources=['python/2/otter_py2_wrap.c'],
-        library_dirs=['python/']
+    otter_py2 = Extension('otter_funcs_py2',
+        include_dirs=['.'],
+        sources=['otter_py3_wrap.c'],
+        library_dirs=['.'],
+        libraries=['otter']
     )
     setup(name='otter',
           version='0.10',
@@ -38,15 +40,17 @@ if platform.python_version().startswith('2'):
         keywords='NLP,tokenizing,Chinese word segementation',
         packages=['otter'],
         package_dir={'otter':'otter'},
-          package_data={'otter':['src/*.py','dict/*.*']},
+        package_data={'otter':['otter/*.py','dict/*.*']},
         ext_modules = [otter_py2],
     )
 
 
 if platform.python_version().startswith('3'):
 
-    otter_py3 = Extension('_otter',
-            sources=['python/3/otter_py3_wrap.c'],
+    otter_py3 = Extension('otter_funcs_py3',
+            include_dirs=['.'],
+            library_dirs=['.'],
+            sources=['otter_py3_wrap.c'],
     )
     setup(name='otter',
           version='0.10',
@@ -74,8 +78,8 @@ if platform.python_version().startswith('3'):
             'Topic :: Text Processing :: Linguistic',
         ],
         keywords='NLP,tokenizing,Chinese word segementation',
-        packages=['otter'],
+        packages=['otter','enchant'],
         package_dir={'otter':'otter'},
-          package_data={'otter':['src/*.py','dict/*.*']},
+        package_data={'otter':['otter/*.py','dict/*.*']},
         ext_modules = [otter_py3],
 )

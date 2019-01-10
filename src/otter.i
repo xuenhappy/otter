@@ -1,7 +1,5 @@
-%module otter
+%module otter_funcs
 %include "stdint.i"
-%include "std_string.i"
-
 %{
 #include "otter_i.h"
 %}
