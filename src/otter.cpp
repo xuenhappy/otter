@@ -105,7 +105,7 @@ int type_ch(char ch){
         return 1;
     if ('A'<=ch && ch<='Z')
         return 1;
-    if (u'0'<=ch && ch<='9')
+    if ('0'<=ch && ch<='9')
         return 2;
     return -1;
 }

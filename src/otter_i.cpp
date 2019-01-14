@@ -2,6 +2,7 @@
 #include "otter.h"
 #include <list>
 #include <string>
+#include <stdio.h>
 #include <enchant/enchant.h>
 
 
