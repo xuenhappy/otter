@@ -6,6 +6,7 @@
 #include <string.h>
 #include <enchant/enchant.h>
 
+size_t MAX_SEG_LEN=30000;
 
 struct seg_dict{
     trie_ptr dict;
@@ -47,9 +48,9 @@ void free_otter_dict(otter_dict_ptr dict_obj){
 
 otter_result_ptr otter_cut(otter_dict_ptr dict_obj,const char* utf_input,unsigned int len,int basic_mode){
     size_t x=strlen(utf_input);
-    if(len<1||len>x){
-        len=x;
-    }
+    if(len<1||len>x)len=x;
+    if(len>MAX_SEG_LEN)len=MAX_SEG_LEN;
+    
     std::list<std::string> *data=new std::list<std::string>();
     std::vector<std::string> strlist;
     if(basic_mode){
