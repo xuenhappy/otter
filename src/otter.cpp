@@ -123,7 +123,7 @@ int enchant_split(std::list<std::string> &tmp,const std::string &str,EnchantDict
         return 1;
     }
     size_t idx;
-    for(idx=2;idx<max_index-2;++idx){
+    for(idx=3;idx<max_index-2;++idx){
         std::string left=str.substr(0,max_index-idx);
         std::string right=str.substr(max_index-idx,idx);
         if(!enchant_dict_check(en_dict,right.c_str(),right.length())){
@@ -178,6 +178,11 @@ void addtobuffer(std::vector<std::string> &result,const std::string &str,int typ
         for(it=tmp.begin();it!=tmp.end();++it){
             result.push_back(*it);
         }
+        return;
+    }
+    if(str.length()>32){
+    //too long
+        result.push_back(str);
         return;
     }
     tmp.clear();
