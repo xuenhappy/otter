@@ -56,6 +56,8 @@ void select_path(std::map<size_t,std::list<path_data>* > &distance_mat,const siz
                 mindist=x.val;
             }
         }
+        if(mindist<0)
+            break;
         vdata[u].vist=1;
         if(vdata[end_point].vist)
             break;
