@@ -3,6 +3,7 @@
 #include <list>
 #include <string>
 #include <stdio.h>
+#include <string.h>
 #include <enchant/enchant.h>
 
 
@@ -45,6 +46,10 @@ void free_otter_dict(otter_dict_ptr dict_obj){
 
 
 otter_result_ptr otter_cut(otter_dict_ptr dict_obj,const char* utf_input,unsigned int len,int basic_mode){
+    size_t x=strlen(utf_input);
+    if(len<1||len>x){
+        len=x;
+    }
     std::list<std::string> *data=new std::list<std::string>();
     std::vector<std::string> strlist;
     if(basic_mode){
