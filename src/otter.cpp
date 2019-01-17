@@ -12,7 +12,8 @@
 #include <math.h>
 #include <set>
 
-size_t MAX_FREQ=100000l; 
+size_t MAX_FREQ=2e10; 
+size_t MIN_FREQ=10; 
 
 typedef struct path_node{
     size_t endpoint;//边结束点
@@ -292,7 +293,7 @@ trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict,std::map
         }
         if(slen<1)continue;
         //split words and number
-        size_t tag=1;
+        size_t tag=MIN_FREQ;
         size_t i=0;
         while((line[i]!='\0') && (line[i]!=' '))
             i++;
@@ -367,7 +368,7 @@ void split_list(trie_ptr dict,std::map<std::string,float> &single_data,std::vect
         if(smit!=single_data.end()){
             tnode.score=smit->second;
         }else{
-            tnode.score=log(MAX_FREQ);
+            tnode.score=log(MAX_FREQ*1.0/MIN_FREQ);
         }
         tnode.endpoint=index;
         tnode.idstr=sit->c_str();
