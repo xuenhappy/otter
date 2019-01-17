@@ -5,11 +5,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <enchant/enchant.h>
-
+#include <map>
 size_t MAX_SEG_LEN=30000;
 
 struct seg_dict{
     trie_ptr dict;
+    std::map<std::string,float> *single_data;
     EnchantBroker *en_broker;
     EnchantDict *en_dict;
 };
@@ -22,9 +23,10 @@ struct seg_result{
 
 otter_dict_ptr load_otter_dict(const char* path,int basic_mode){
     otter_dict_ptr dc=new struct seg_dict();
+    dc->single_data=new std::map<std::string,float>();
     dc->en_broker=enchant_broker_init();
     dc->en_dict=enchant_broker_request_dict(dc->en_broker,"en_us");
-    dc->dict=load_dict(path,basic_mode,dc->en_dict);
+    dc->dict=load_dict(path,basic_mode,dc->en_dict,*(dc->single_data));
     if(!(dc->en_broker&&dc->en_broker&&dc->en_dict)){
         printf("load dict failed!\n");
         free_otter_dict(dc);
@@ -36,6 +38,7 @@ otter_dict_ptr load_otter_dict(const char* path,int basic_mode){
 
 void free_otter_dict(otter_dict_ptr dict_obj){
     if(dict_obj){
+        delete dict_obj->single_data;
         free_trie_node(dict_obj->dict);
         if(dict_obj->en_dict)
             enchant_broker_free_dict(dict_obj->en_broker,dict_obj->en_dict);
@@ -58,7 +61,7 @@ otter_result_ptr otter_cut(otter_dict_ptr dict_obj,const char* utf_input,unsigne
     }else{
         char_split(utf_input,len,strlist,dict_obj->en_dict);
     }
-    split_list(dict_obj->dict,strlist,*data);
+    split_list(dict_obj->dict,*(dict_obj->single_data),strlist,*data);
     otter_result_ptr res=new struct seg_result();
     res->data=data;
     res->it=data->begin();

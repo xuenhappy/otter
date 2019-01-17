@@ -35,13 +35,13 @@ void char_split(const char* input_str,size_t len,std::vector<std::string> &resul
  * 加载dict文件
  * @param:basic_mode是否采用basic切分方式加载
  **/
-trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict);
+trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict,std::map<std::string,float> &single_data);
 
 
 /**
  * 对给定的list利用dict进行组合切分，并按照最短覆盖路径进行选择
  **/
-void split_list(trie_ptr dict,std::vector<std::string> &src_list,std::list<std::string> &result);
+void split_list(trie_ptr dict,std::map<std::string,float> &single_data,std::vector<std::string> &src_list,std::list<std::string> &result);
 
 
 

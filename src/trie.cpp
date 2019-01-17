@@ -19,7 +19,7 @@ struct trie_node {
     //self info
     char* utf8_str;//本节点字符串
     size_t hash_val;//hash取值
-    int danger; //是否为最终节点
+    float tag;//tag>0表示存在该节点并且tag表示该节点的信息
 
     //sub info
     int subsize; //真实的子节点的个数
@@ -47,7 +47,7 @@ trie_ptr make_trie_node(const char* str,size_t hashval){
     trie_ptr tnode=(trie_ptr)malloc(sizeof(struct trie_node));
     tnode->utf8_str=scpy(str);
     tnode->hash_val=hashval;
-    tnode->danger=0;
+    tnode->tag=0;
 
     tnode->subsize=0;
     tnode->caplity=0;
@@ -75,7 +75,7 @@ void free_trie_node(trie_ptr tnode){
     tnode->next=NULL;
     free(tnode->utf8_str);
     tnode->utf8_str=NULL;
-    tnode->danger=tnode->hash_val=0;
+    tnode->tag=tnode->hash_val=0;
     free(tnode);
 }
 
@@ -150,7 +150,7 @@ void print_node(trie_ptr tnode,int deep){
         }
     }
     printf("-%s",tnode->utf8_str);
-    if (tnode->danger) {
+    if (tnode->tag>0) {
         printf("*");
     }
     printf("\n");
@@ -168,7 +168,7 @@ void print_node(trie_ptr tnode,int deep){
 /**
  * 向trie树中加入一个序列
  */
-trie_ptr insert_trie(trie_ptr tnode,const char* str,int danger){
+trie_ptr insert_trie(trie_ptr tnode,const char* str,float tag){
     size_t hashval=hash_string(str);
     int index =binary_search_sub(tnode,str,hashval);
     trie_ptr tmp;
@@ -177,8 +177,8 @@ trie_ptr insert_trie(trie_ptr tnode,const char* str,int danger){
         add_trie_node(tnode,-index-1,tmp);
     } else
         tmp = tnode->next[index];
-    if(!tmp->danger)//修改结尾信息
-        tmp->danger = danger;
+    if(tmp->tag<=0&& tag>0)//修改结尾信息
+        tmp->tag =tag;
     return tmp;
 }
 
@@ -202,9 +202,10 @@ void findseq(trie_ptr root,const std::vector<std::string> &seq, std::list<trie_m
         //检查path路径是否可以继续
         for(pit=paths.begin();pit!=paths.end();){
             tmp=pit->first;
-            if(tmp->danger){
+            if(tmp->tag>0){
                 trie_match_result &h=pit->second;
                 h.et=index-1;
+                h.tag=tmp->tag;
                 result.push_back(h);
             }
             idx=binary_search_sub(tmp,cit->c_str(),hash);
@@ -228,10 +229,11 @@ void findseq(trie_ptr root,const std::vector<std::string> &seq, std::list<trie_m
     //检查path路径是否可以继续
     for(pit=paths.begin();pit!=paths.end();pit=paths.erase(pit)){
         tmp=pit->first;
-        if(!tmp->danger)
+        if(tmp->tag<=0)
             continue;
         trie_match_result &h=pit->second;
         h.et=index-1;
+        h.tag=tmp->tag;
         result.push_back(h);
     }
 }

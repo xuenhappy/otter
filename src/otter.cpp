@@ -9,7 +9,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include <set>
+
+size_t MAX_FREQ=100000l; 
 
 typedef struct path_node{
     size_t endpoint;//边结束点
@@ -20,7 +23,7 @@ typedef struct path_node{
 struct node_dat{
     int pre;
     int vist;
-    float val;
+    double val;
 };
 
 
@@ -253,7 +256,7 @@ void char_split(const char* input_str,size_t len,std::vector<std::string> &resul
 	}
 }
 
-trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict){
+trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict,std::map<std::string,float> &single_data){
     FILE *fp;
     if((fp = fopen(path,"r")) == NULL){
         printf("open file %s error!\n",path);
@@ -269,6 +272,7 @@ trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict){
     std::vector<std::string>::const_iterator it;
     trie_ptr dict=make_trie_node("trie",0);
     trie_ptr tmp;
+    char* line;
     while (fgets(buffer,bsize,fp)){
         word_list.clear();
         size_t slen=strlen(buffer)-1;
@@ -276,15 +280,51 @@ trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict){
             continue;
         }
         buffer[slen]='\0';
-        if(basic_mode){
-            basic_split(buffer,slen,word_list,en_dict);
-        }else{
-            char_split(buffer,slen,word_list,en_dict);
+        line=buffer;
+        //strip()
+        while(line[0]==' '||line[0]=='\r'||line[0]=='\n'){
+            line++;
+            slen--;
         }
+        while(line[slen-1]==' '||line[slen-1]=='\r'||line[slen-1]=='\n'){
+            line[slen-1]='\0';
+            slen--;
+        }
+        if(slen<1)continue;
+        //split words and number
+        size_t tag=1;
+        size_t i=0;
+        while((line[i]!='\0') && (line[i]!=' '))
+            i++;
+        if (i<1)continue;
+        line[i]='\0';
+        if(basic_mode){
+            basic_split(line,i,word_list,en_dict);
+        }else{
+            char_split(line,i,word_list,en_dict);
+        }
+        if(i<slen){
+            i++;
+            while((line[i]!='\0') && (line[i]==' '))
+                i++;
+        }
+        if(i<slen){
+            tag=atol(line+i);
+            if(tag<1)continue;//wrong input
+            if(tag>MAX_FREQ)tag=MAX_FREQ;
+        }
+        
+        //insert to trie
         tmp=dict;
         int s=word_list.size();
+        float c=log(MAX_FREQ*1.0/tag);
+        //printf("%s-->%lf\n",line,c);
+        if(s<2){
+            single_data.insert(std::pair<std::string,float>(line,c));
+            continue;
+        }
         for(it=word_list.begin();it!=word_list.end();++it){
-            tmp=insert_trie(tmp,it->c_str(),--s<=0);
+            tmp=insert_trie(tmp,it->c_str(),(--s<=0)*c);
         }
     }
     fclose(fp);
@@ -306,7 +346,7 @@ void join_str(std::vector<std::string> &src_list,size_t st,size_t et,std::list<s
     }
 }
 
-void split_list(trie_ptr dict,std::vector<std::string> &src_list,std::list<std::string> &result){
+void split_list(trie_ptr dict,std::map<std::string,float> &single_data,std::vector<std::string> &src_list,std::list<std::string> &result){
     std::list<trie_match_result> tmp;
     findseq(dict,src_list,tmp);
     if(tmp.size()<1){//!nothing to do
@@ -320,9 +360,15 @@ void split_list(trie_ptr dict,std::vector<std::string> &src_list,std::list<std::
     path_data tnode;
     //add basic data
     size_t index=-1;
+    std::map<std::string,float>::const_iterator smit;
     for(sit=src_list.begin();sit!=src_list.end();++sit){
         ++index;
-        tnode.score=1.0;
+        smit=single_data.find(*sit);
+        if(smit!=single_data.end()){
+            tnode.score=smit->second;
+        }else{
+            tnode.score=log(MAX_FREQ);
+        }
         tnode.endpoint=index;
         tnode.idstr=sit->c_str();
         std::list<path_data>* c=new std::list<path_data>();
@@ -334,7 +380,7 @@ void split_list(trie_ptr dict,std::vector<std::string> &src_list,std::list<std::
     //store and add tmp join data
     std::list<std::string> join_data;
     for(it=tmp.begin();it!=tmp.end();++it){
-        tnode.score=1.0;
+        tnode.score=it->tag;
         tnode.endpoint=it->et;
         join_str(src_list,it->st,it->et,join_data);
         tnode.idstr=join_data.back().c_str();

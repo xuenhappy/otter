@@ -17,6 +17,7 @@ typedef struct trie_node* trie_ptr;
 typedef struct trie_match_node{
     size_t st;//开始位置
     size_t et;//结束位置
+    float tag;//其他基本信息
 }trie_match_result;
 
 
@@ -38,7 +39,7 @@ void print_node(trie_ptr tnode,int deep);
 /***
  * 通过字符串构建Trie
  ***/
-trie_ptr insert_trie(trie_ptr tnode,const char* str,int danger);
+trie_ptr insert_trie(trie_ptr tnode,const char* str,float tag);
 
 
 /**
