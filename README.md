@@ -4,10 +4,13 @@
 # Install
 
 <pre>
-本程序依赖enchant,
-ubuntu请使用apt install libenchant-dev
-centos安装yum install libenchant
-python3安装pip3 install cython
+本程序依赖:
+
+ubuntu执行: apt install libenchant-dev
+centos执行: yum install enchant-devel
+macos 执行: brew install libenchant
+python3 请先执行 pip3 install cython
+-------------------------------------------------------------
 
 python2:
  sudo pip2 install --upgrade https://github.com/xuenhappy/otter/raw/master/otter-0.10.tar.gz
