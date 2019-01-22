@@ -1,5 +1,6 @@
 all:compile-lib;
 	rm -rf *.bin
+	#g++ -g -fPIC  src/test.cpp -L./ -lotter -lenchant-2 -o otter.bin
 	g++ -g -fPIC  src/test.cpp -L./ -lotter -lenchant -o otter.bin
 	rm -rf *.a
 	
