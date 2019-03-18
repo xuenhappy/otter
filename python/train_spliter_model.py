@@ -257,6 +257,11 @@ def make_graph(dlist,user_dict,distance_func,other_words=set([])):
 def mine_exp(i):
     return torch.exp(torch.clamp(i,-80,20))
 
+def logsumexp(vec):
+    vec=torch.cat(vec)
+    m,_=vec.max()
+    return m+torch.log(torch.exp(vec-m).sum())
+
 class SpliterModel(torch.nn.Module):
     def __init__(self,worddict, n_hidden):
         torch.nn.Module.__init__(self)
@@ -302,7 +307,8 @@ class SpliterModel(torch.nn.Module):
                 l=union_g[idx-1]
                 if any(e[0] not in crossed for e in l):
                     continue
-                esum[idx]=torch.log(sum(mine_exp(esum[c]-d) for c,d in l))
+                esum[idx]=logsumexp([esum[c]-d for c,d in l])
+                #esum[idx]=torch.log(sum(mine_exp(esum[c]-d) for c,d in l))
                 crossed.add(idx)
                 unpassed.remove(idx)
         return esum[-1]
