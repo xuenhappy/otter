@@ -254,13 +254,7 @@ def make_graph(dlist,user_dict,distance_func,other_words=set([])):
     return re_shape_g
 
 
-def mine_exp(i):
-    return torch.exp(torch.clamp(i,-80,20))
 
-def logsumexp(vec):
-    vec=torch.cat(vec)
-    m,_=vec.max()
-    return m+torch.log(torch.exp(vec-m).sum())
 
 class SpliterModel(torch.nn.Module):
     def __init__(self,worddict, n_hidden):
@@ -270,7 +264,10 @@ class SpliterModel(torch.nn.Module):
         self.predict = torch.nn.Linear(n_hidden,1,bias=False) 
         self.hd = torch.nn.Hardtanh(0,8)
 
-
+    def _logsumexp(self,vec):
+        vec=torch.cat(vec,0)
+        m,_=vec.max(0)
+        return m+torch.log(torch.exp(vec-m).sum(0))
 
 
     def distance(self,x,y):  
@@ -307,8 +304,7 @@ class SpliterModel(torch.nn.Module):
                 l=union_g[idx-1]
                 if any(e[0] not in crossed for e in l):
                     continue
-                esum[idx]=logsumexp([esum[c]-d for c,d in l])
-                #esum[idx]=torch.log(sum(mine_exp(esum[c]-d) for c,d in l))
+                esum[idx]=self._logsumexp([esum[c]-d for c,d in l])
                 crossed.add(idx)
                 unpassed.remove(idx)
         return esum[-1]
