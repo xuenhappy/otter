@@ -141,7 +141,7 @@ class SplitModel(torch.nn.Module):
 
 if __name__ == "__main__":
     worddict=WordDict("dict.h5")
-    dataset=SegDataSetIter("seg_text.txt",8,10,worddict)
+    dataset=SegDataSetIter("seg_text.txt",15,10,worddict)
     dataset=MultiTaskBatchWapper(dataset,10)
     model=SplitModel(worddict.wv_size()*2,40)
     solver=Solver(model,dataset)
