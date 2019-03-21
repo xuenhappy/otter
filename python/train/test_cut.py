@@ -1,5 +1,5 @@
 #coding=utf-8
-from train_spliter_model import basic_cut,WordDict
+from data_reader import basic_cut,WordDict
 import numpy as np
 import sys
 
