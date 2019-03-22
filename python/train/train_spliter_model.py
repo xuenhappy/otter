@@ -58,8 +58,8 @@ class Solver():
                 while iter_num < self.iter_num:
                     iter_num += 1
                     step += 1
+                    self.optimizer.zero_grad() 
                     loss=self.model.loss_fuc(td)
-                    self.optimizer.zero_grad()  
                     loss.backward()
                     self.optimizer.step()
                     print('train [epoch|sample|step]:[%d|%d|%d] loss:%g' % (epoch_num,sample_num,step, float(loss)))
