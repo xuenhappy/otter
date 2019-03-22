@@ -13,7 +13,7 @@ from data_reader import WordDict,SegDataSetIter
 
     
 class Solver():
-    def __init__(self,model,dataset,lr=0.8,epoch_num=2,iter_num=4):
+    def __init__(self,model,dataset,lr=1e-4,epoch_num=2,iter_num=4):
         self.model=model
         self.dataset=dataset
         self.epoch_num=epoch_num
@@ -40,10 +40,6 @@ class Solver():
         state_dict=dict((k,v.cpu().numpy()) for (k,v) in self.model.state_dict().items())
         np.savez(os.path.join(self.out_dir, "model-%d"%epoch_num),**state_dict)
         
-    def adjust_learning_rate(self,epoch):
-        lr = self.lr *(0.6 **(epoch/4000.0))+1e-4
-        for param_group in self.optimizer.param_groups:
-            param_group['lr'] = lr
 
 
     def solve(self):
@@ -63,7 +59,6 @@ class Solver():
                     loss.backward()
                     self.optimizer.step()
                     print('train [epoch|sample|step]:[%d|%d|%d] loss:%g' % (epoch_num,sample_num,step, float(loss)))
-                self.adjust_learning_rate(sample_num)
                 if sample_num%10000==0:
                     self.save_torch_model(sample_num)
         print("finish train job...")
