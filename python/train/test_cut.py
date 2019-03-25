@@ -5,16 +5,17 @@ import sys
 
 class Model():
     def __init__(self,mpath):
-        param=np.load("mpath")
-        self.hw=np.transpose(param["hidden.weight"])
-        self.hb=param["hidden.bias"]
-        self.pw=np.transpose(param["predict.weight"])
+        param=np.load(mpath)
+        self.hw=np.transpose(param["predict.0.weight"])
+        self.hb=param["predict.0.bias"]
+        self.pw=np.transpose(param["predict.2.weight"])
+        self.pb=param["predict.2.bias"]
 
 
     def distance(self,x,y):
         x=np.reshape(np.concatenate([x,y],-1),(1,-1)) 
         y=np.tanh(np.dot(x,self.hw)+self.hb)
-        y=np.dot(y,self.pw)
+        y=np.dot(y,self.pw)+self.pb
         return np.clip(y,0,8)[0][0]
 
 
@@ -84,16 +85,9 @@ def choice_path(widx,union_grap):
 
 
 
-
-
-
-
-
-
-
 if __name__ == "__main__":
     wd=WordDict("dict.h5")
-    md=Model("model_dat/1548997996/model-20000.npz")
+    md=Model("train_split/model_dat/1553245956/model-60000.npz")
     for line in sys.stdin:
         line=line.strip()
         if not line:
@@ -102,6 +96,3 @@ if __name__ == "__main__":
         widx,union_grap=make_graph(line,wd,md.distance)
         listi=choice_path(widx,union_grap)
         print u"|".join(listi).encode("utf-8")
-
-
-       
