@@ -1,7 +1,6 @@
 import setuptools
 from distutils.core import setup, Extension
 import platform
-
 LONGDOC = 'Fast C Short Path chinese and english cut'
 
 if platform.python_version().startswith('2'):
@@ -64,12 +63,10 @@ def get_ext_filename_without_platform_suffix(filename):
         return name[:idx] + ext
 
 
-
-
-
 if platform.python_version().startswith('3'):
-    from Cython.Build import cythonize
-    from Cython.Distutils import build_ext
+    
+    from distutils.command.build_ext import build_ext
+
     class BuildExtWithoutPlatformSuffix(build_ext):
         def get_ext_filename(self, ext_name):
             filename = super().get_ext_filename(ext_name)

@@ -38,6 +38,14 @@ void char_split(const char* input_str,size_t len,std::vector<std::string> &resul
 trie_ptr load_dict(const char* path,int basic_mode,EnchantDict *en_dict,std::map<std::string,float> &single_data);
 
 
+
+/****
+ * 
+ *增加一个词到词典中
+ **/
+void add_item2dict(trie_ptr dict,const char* line,size_t linelen,int basic_mode,EnchantDict *en_dict,std::map<std::string,float> &single_data);
+
+
 /**
  * 对给定的list利用dict进行组合切分，并按照最短覆盖路径进行选择
  **/

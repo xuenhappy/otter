@@ -50,6 +50,20 @@ def cut_3(unincode_input,use_basic =True):
         yield word
     otter_func.free_otter_result(handle)
 
+
+
+def add_str2dict(unincode_input, use_basic=True):
+    """
+    add strs to dict
+    """
+    lens=len(unincode_input.encode('utf-8', 'ignore'))
+    if use_basic:
+        otter_func.add_str2dict(MAIN_DICT,unincode_input,lens,1)
+    else:
+        otter_func.add_str2dict(EN_DICT,unincode_input,lens,0)
+
+
+
 cut=None
 if platform.python_version().startswith('2'):
     cut=cut_2

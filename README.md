@@ -9,7 +9,6 @@
 ubuntu执行: apt install libenchant-dev
 centos执行: yum install enchant-devel
 macos 执行: brew install enchant
-python3 请先执行 pip3 install cython
 -------------------------------------------------------------
 
 macos:

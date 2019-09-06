@@ -404,3 +404,31 @@ void split_list(trie_ptr dict,std::map<std::string,float> &single_data,std::vect
     }
 }
 
+
+
+void add_item2dict(trie_ptr dict,const char* line,size_t linelen,int basic_mode,EnchantDict *en_dict,std::map<std::string,float> &single_data){
+    if(line==NULL||linelen<1){
+        return;
+    }
+    std::vector<std::string> word_list;
+    std::vector<std::string>::const_iterator it;
+    trie_ptr tmp;
+    if(basic_mode){
+        basic_split(line,linelen,word_list,en_dict);
+    }else{
+        char_split(line,linelen,word_list,en_dict);
+    }
+    //insert to trie
+    tmp=dict;
+    int s=word_list.size();
+    float c=log(MAX_FREQ*1.0/200);
+    //printf("%s-->%lf\n",line,c);
+    if(s<2){
+        single_data.insert(std::pair<std::string,float>(line,c));
+        return;
+    }
+    for(it=word_list.begin();it!=word_list.end();++it){
+        tmp=insert_trie(tmp,it->c_str(),(--s<=0)*c);
+    }
+   
+}

@@ -36,6 +36,10 @@ otter_dict_ptr load_otter_dict(const char* path,int basic_mode){
 }
 
 
+
+
+
+
 void free_otter_dict(otter_dict_ptr dict_obj){
     if(dict_obj){
         delete dict_obj->single_data;
@@ -47,6 +51,12 @@ void free_otter_dict(otter_dict_ptr dict_obj){
         delete dict_obj;
     }
 }
+
+
+void add_str2dict(otter_dict_ptr dict_obj,const char* utf_input,unsigned int len,int basic_mode){
+    add_item2dict(dict_obj->dict,utf_input,len,basic_mode,dict_obj->en_dict,*(dict_obj->single_data));
+}
+
 
 
 otter_result_ptr otter_cut(otter_dict_ptr dict_obj,const char* utf_input,unsigned int len,int basic_mode){

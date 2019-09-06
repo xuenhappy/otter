@@ -21,12 +21,24 @@ typedef struct seg_result* otter_result_ptr;
  **/
 otter_dict_ptr load_otter_dict(const char* path,int basic_mode);
 
+
+
 /***
  * 
  * 释放给定的模型文件
  * 
  **/
 void free_otter_dict(otter_dict_ptr dict_obj);
+
+
+
+
+/***
+ * 
+ * 增加字符串到数组
+ * 
+ **/
+void add_str2dict(otter_dict_ptr dict_obj,const char* utf_input,unsigned int len,int basic_mode);
 
 /**
  * 
